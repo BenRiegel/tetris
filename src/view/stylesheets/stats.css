@@ -1,0 +1,32 @@
+.score{
+  margin-top: 20px;
+  background-color: gray;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.score-element{
+  justify-content: space-between;
+  align-items: center;
+  text-transform: uppercase;
+  text-align: center;
+  padding-bottom: 10px;
+  padding-top: 0px;
+}
+
+.score-element:last-child{
+  padding-bottom: 0px;
+}
+
+.score-name{
+  color: white;
+  margin-bottom: 5px;
+}
+
+.score-value{
+  background-color: black;
+  color: white;
+  font-size: 20px;
+  padding: 5px;
+  border-radius: 5px;
+}

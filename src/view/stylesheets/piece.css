@@ -1,0 +1,7 @@
+.piece{
+  position:relative;
+}
+
+.piece-row{
+  display:flex;
+}

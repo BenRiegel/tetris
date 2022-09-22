@@ -1,0 +1,39 @@
+.cell{
+  box-sizing: border-box;
+  border-top: 3px solid rgba(240, 240, 240, 0.6);
+  border-left: 3px solid rgba(0, 0, 0, 0.15);
+  border-right: 3px solid rgba(0, 0, 0, 0.15);
+  border-bottom: 3px solid rgba(0, 0, 0, 0.5);
+}
+
+.cell.hidden{
+  visibility: hidden;
+}
+
+.cell-type-0 {
+  background-color: #00f0f0; /*cyan;*/
+}
+
+.cell-type-1{
+  background-color: #f0f000; /*yellow;*/
+}
+
+.cell-type-2{
+  background-color: #a000f0;  /*purple*/
+}
+
+.cell-type-3{
+  background-color: #0000f0; /*blue;*/
+}
+
+.cell-type-4{
+  background-color: #f0a000; /* orange;*/
+}
+
+.cell-type-5{
+  background-color: #00ff00;  /*green*/
+}
+
+.cell-type-6{
+  background-color: #f00000;   /*red*/
+}
