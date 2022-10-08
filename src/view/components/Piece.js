@@ -1,9 +1,12 @@
+//----- imports ----------------------------------------------------------------
+
 import Cell from './Cell.js';
 import '../stylesheets/piece.css';
 
 
+//----- module code block ------------------------------------------------------
 
-export default function Piece( {cells} ){
+function Piece( {cells} ){
   return (
     <div className='piece'>
       {
@@ -24,3 +27,8 @@ export default function Piece( {cells} ){
     </div>
   );
 }
+
+
+//----- export code block ------------------------------------------------------
+
+export default Piece;

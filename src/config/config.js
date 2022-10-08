@@ -1,23 +1,14 @@
+//----- export code block ------------------------------------------------------
 
+export const CLEAR_DURATION = 200;
 
-const fallTimeIntervals = [500, 450, 400, 300, 250, 200]
+export const DROP_PIECE_SPEED = 25;
 
-const numLevels = fallTimeIntervals.length;
+export const ROW_FALL_SPEED = 100;
 
-export function getFallTimeInterval(level){
-  return fallTimeIntervals[level];
-}
+export const CELL_SIZE = 30;
 
-
-
-export const cellSize = 30;
-
-export const boardDimensions = {
+export const boardDimensions = {  //capitalize?
   numRows: 20,
   numColumns: 10,
-}
-
-export const nextPieceDimensions = {
-  numRows: 4,
-  numColumns: 6,
 }

@@ -1,38 +1,69 @@
 //----- imports ----------------------------------------------------------------
 
-import { useRef } from 'react';
-import { useCounter, useOnRenderAsync } from '../../lib/hooks.js';
-import { animateFadeOut } from '../../lib/animate.js';   ///<-- don't like this here
+import { useEffect, useRef, useState } from 'react';
+import { animateFade } from '../../services/animator.js';
 import '../stylesheets/count-down.css';
-import state from '../../state/state.js';
 
 
-//----- export code block ------------------------------------------------------
+//----- module code block ------------------------------------------------------
 
-export default function CountDown(props){
+function useCounter(initValue){
+  const onIteration = useRef();
+  const onComplete = useRef();
+  const [count, setCount] = useState(initValue);
+  function setOnIteration(callback){
+    onIteration.current = callback;
+  }
+  function setOnComplete(callback){
+    onComplete.current = callback;
+  }
+  function decrement(){
+    setCount( prevCount => prevCount - 1 );
+  }
+  useEffect( ()=>{
+    (async function(){
+      if (onIteration.current){
+        await onIteration.current(count);
+      }
+      if (count > 0){
+        decrement();
+      } else {
+        if (onComplete.current){
+          onComplete.current();
+        }
+      }
+    }());
+  }, [count]);
+  return [count, setOnIteration, setOnComplete];
+}
 
-  const [count, decrement] = useCounter(3);
-  const onRender = useOnRenderAsync();
+function CountDown(props){
+  const [count, onIterationDo, onCompleteDo] = useCounter(3);
   const containerDiv = useRef();
   const countDiv = useRef();
-
-  onRender(async function(){
-    if (count > 0){
-      await animateFadeOut(countDiv.current, 750);
-      decrement();
+  onIterationDo(function(newCount){
+    if (newCount > 0){
+      return animateFade(countDiv.current, 1, 0, 750);
     } else {
-      await animateFadeOut(containerDiv.current, 500);
-      props.onFinish();
+      return animateFade(containerDiv.current, 1, 0, 500);
     }
   });
-
-  const countStr = (count > 0 ? `${count}` : '');
-
+  onCompleteDo(props.onFinish);
+  function renderCount(){
+    if (count > 0){
+      return count;
+    }
+  }
   return (
     <div className='countDown' ref={containerDiv}>
       <div className='count' ref={countDiv}>
-        {countStr}
+        { renderCount() }
       </div>
     </div>
   );
 }
+
+
+//----- export code block ------------------------------------------------------
+
+export default CountDown;

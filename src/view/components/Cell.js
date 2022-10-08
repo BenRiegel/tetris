@@ -1,24 +1,30 @@
-import { cellSize } from '../../config/config.js';
+//----- imports ----------------------------------------------------------------
+
+import { CELL_SIZE } from '../../config/config.js';
 import '../stylesheets/cell.css';
 
 
-export default function Cell( {cell} ){
+//----- module code block ------------------------------------------------------
 
-  const style = {
-    width:`${cellSize}px`,
-    height:`${cellSize}px`
-  }
+const style = {
+  width:`${CELL_SIZE}px`,
+  height:`${CELL_SIZE}px`
+}
 
+function Cell( {cell} ){
   let classes = ['cell'];
   if (cell.hasContent){
     classes.push(`cell-type-${cell.type}`);
   } else {
     classes.push('hidden');
   }
-
-  let classNames = classes.join(' ');
-
+  const classNames = classes.join(' ');
   return (
     <div className={classNames} style={style}></div>
   );
 }
+
+
+//----- export code block ------------------------------------------------------
+
+export default Cell;

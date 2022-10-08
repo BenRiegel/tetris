@@ -1,7 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+//----- imports ----------------------------------------------------------------
+
+import { useRef, useEffect, useState } from 'react';
 
 
-export function useOnMount(){
+//----- module code block ------------------------------------------------------
+
+function useOnMount(){
   let callback = useRef();
   useEffect( ()=>{
     if (callback.current){
@@ -13,33 +17,7 @@ export function useOnMount(){
   }
 }
 
-
-
-
-export function useCounter(initValue){
-
-  const [count, setCount] = useState(initValue);
-
-  function decrement(){
-    setCount( prevCount => prevCount - 1 );
-  }
-
-  return [count, decrement];
-
-}
-
-
-/*export function useEventQueue(eventsList){
-
-  const [events, setEvents] = useState([...eventsList]);
-
-  function doNextEvent(){
-    setEvents( prevEvents => prevEvents.slice(1) );
-  }
-  return [events[0], events.length === 1, doNextEvent];
-}*/
-
-export function useOnRenderAsync(){
+function useOnRenderAsync(){
   let callback = useRef();
   useEffect( ()=>{
     (async function(){
@@ -53,17 +31,29 @@ export function useOnRenderAsync(){
   }
 }
 
-
-/*export function useOnMountAsync(){
-  let callback = useRef();
-  useEffect( ()=>{
-    (async function(){
-      if (callback.current){
-        await callback.current();
-      }
-    }());
-  }, []);
-  return function setCallback(cb){
-    callback.current = cb;
+function useStore(store){
+  const onMountDo = useOnMount();
+  const [value, setValue] = useState(store.value);
+  const resolveF = useRef();
+  function handleValueChange(newValue){
+    return new Promise( (resolve, reject)=>{
+      resolveF.current = resolve;
+      setValue(newValue);
+    });
   }
-}*/
+  onMountDo( ()=>{
+    store.subscribe(handleValueChange);
+  });
+  useEffect( ()=>{
+    if (resolveF.current){
+      resolveF.current();
+      resolveF.current = null;
+    }
+  });
+  return value;
+}
+
+
+//----- export code block ------------------------------------------------------
+
+export { useOnMount, useOnRenderAsync, useStore };

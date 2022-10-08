@@ -1,18 +1,13 @@
 //----- imports ----------------------------------------------------------------
 
-import '../stylesheets/button.css';
+import Store from '../lib/store.js';
 
 
 //----- module code block ------------------------------------------------------
 
-function Button(props){
-
-  return (
-    <button onClick={props.onClick}>{props.text}</button>
-  );
-}
+const statusStore = new Store('starting');
 
 
 //----- export code block ------------------------------------------------------
 
-export default Button;
+export default statusStore;

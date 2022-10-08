@@ -1,3 +1,10 @@
+//----- imports ----------------------------------------------------------------
+
+import Store from '../lib/store.js';
+
+
+//----- module code block ------------------------------------------------------
+
 function calcDropScore(dist){
   return dist;
 }
@@ -23,15 +30,25 @@ function calcLinesScore(numLines, level){
   return ( baseScore * (level+1) );
 }
 
-export function calcScore( action ){
-  switch (action.type){
-    case 'drop':
-      return calcDropScore(action.dist);
-      break;
-    case 'lines-cleared':
-      return calcLinesScore(action.numLines, action.level);
-      break;
-    default:
-      break;
+class ScoreStore extends Store {
+  constructor(initValue){
+    super(initValue);
+  }
+  scoreDrop(dropDist){
+    const dropScore = calcDropScore(dropDist);
+    const newScore = this.value + dropScore;
+    this.update(newScore);
+  }
+  scoreLinesCleared(numLines, level){
+    const linesScore = calcLinesScore(numLines, level);
+    const newScore = this.value + linesScore;
+    this.update(newScore);
   }
 }
+
+let scoreStore = new ScoreStore(0);
+
+
+//----- export code block ------------------------------------------------------
+
+export default scoreStore;

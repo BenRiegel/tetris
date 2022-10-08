@@ -1,52 +1,34 @@
-import { useState } from 'react';
-import { useOnMount } from '../../lib/hooks.js';
-import state from '../../state/state.js';
+//----- imports ----------------------------------------------------------------
+
+import nextPieceStore from '../../state/next-piece.js';
+import { useStore } from '../../lib/hooks.js';
 import Piece from './Piece.js';
-import { cellSize, nextPieceDimensions  } from '../../config/config.js';
-import '../stylesheets/next-piece.css';
 
 
+//----- module code block ------------------------------------------------------
 
-export default function NextPiece(){
+//don't like all this
+function hasContentCell(row){
+  return row.reduce( (prev, cell) => {
+    return (cell.hasContent || prev);
+  }, false);
+}
 
-  const [piece, setPiece] = useState(state.nextPiece);
-  const onMountDo = useOnMount();
-
-  onMountDo( ()=>{
-    state.onPropChange('nextPiece', setPiece);
+function removeEmptyRows(cells){
+  return cells.filter( row => {
+    return hasContentCell(row);
   });
+}
 
-
-  function hasContentCell(row){
-    return row.reduce( (prev, cell) => {
-      return (cell.hasContent || prev);
-    }, false);
-  }
-
-  function removeEmptyRows(cells){
-    return cells.filter( row => {
-      return hasContentCell(row);
-    });
-  }
-
-  function renderPiece(){
-    if (piece){
-      let clippedCells = removeEmptyRows(piece.cells);
-      return (
-        <Piece cells={clippedCells} />
-      );
-    }
-  }
-
-  let { numRows, numColumns } = nextPieceDimensions;
-  const style = {
-    width:`${cellSize * numColumns}px`,
-    height:`${cellSize * numRows}px`
-  }
-
+function NextPiece(){
+  const nextPiece = useStore(nextPieceStore);
+  const clippedCells = removeEmptyRows(nextPiece.cells);
   return (
-    <div className='next-piece' style={style}>
-      { renderPiece() }
-    </div>
+    <Piece cells={clippedCells} />
   );
 }
+
+
+//----- export code block ------------------------------------------------------
+
+export default NextPiece;

@@ -6,31 +6,46 @@ import { gameKeyCodes } from '../config/keys.js';
 
 //----- module code block ------------------------------------------------------
 
-let emitter = new Emitter();
-let isBroadcasting;
+const keyboard = (function(){
 
-function keyPressHandler(evt){
-  evt.preventDefault();
-  if (isBroadcasting){
-    const isGameKey = gameKeyCodes.includes(evt.keyCode);
-    if (isGameKey){
-      emitter.broadcast(evt.keyCode);
+  let emitter = new Emitter();
+  let isBroadcasting;
+
+  function keyPressHandler(evt){
+    evt.preventDefault();
+    if (isBroadcasting){
+      const gameKeyWasPressed = gameKeyCodes.includes(evt.keyCode);
+      if (gameKeyWasPressed){
+        emitter.broadcast(evt.keyCode);
+      }
     }
   }
-}
 
-const keyboard = {
-  setIsBroadcasting: function(value){
-    isBroadcasting = value;
-  },
-  enable: function(){
+  function enable(){
     document.addEventListener('keydown', keyPressHandler);
-  },
-  disable: function(){
+  }
+
+  function disable(){
     document.removeEventListener('keydown', keyPressHandler);
-  },
-  addListener: emitter.addListener,
-}
+  }
+
+  return {
+    addListener: function(eventName, listener){
+      emitter.addListener(eventName, listener);
+    },
+    updateControls: function(gameStatus){
+      if (gameStatus === 'started'){
+        enable();
+      } else {
+        disable();
+      }
+    },
+    updateEmitter: function(pieceIsActive){
+      isBroadcasting = pieceIsActive;
+    }
+  };
+
+})();
 
 
 //----- export code block ------------------------------------------------------

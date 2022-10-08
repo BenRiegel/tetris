@@ -1,68 +1,81 @@
-import { useState, useRef } from 'react';
-import { useOnMount } from '../../lib/hooks.js';
-import state from '../../state/state.js';
-import { cellSize } from '../../config/config.js';
-import Animator from '../../lib/animator.js';
+//----- imports ----------------------------------------------------------------
+
+import { useStore } from '../../lib/hooks.js';
+import pieceStore from '../../state/piece.js';
+import { CELL_SIZE } from '../../config/config.js';
 import Piece from './Piece.js';
 import '../stylesheets/game-piece.css';
 
 
+//----- module code block ------------------------------------------------------
 
-export default function Game(props){
+function GamePiece(props){
 
-  const [piece, setPiece] = useState(state.piece);   ///<--- do I want this here?
-  const animator = useRef( new Animator() );
-  const pieceContainer = useRef();
-  const onMountDo = useOnMount();
+  const piece = useStore(pieceStore);
 
-  function handlePieceChange(newPiece){
-    if (newPiece && newPiece.animation){
-      function drop(progress){
-        const startTop = newPiece.boardCoords.row * cellSize
-        const top = startTop + progress * newPiece.animation.dist * cellSize;
-        const left = newPiece.boardCoords.column * cellSize;
-        pieceContainer.current.style.transform = `translate(${left}px, ${top}px`;
-      }
-      let duration = 20 * newPiece.animation.dist;
-      return animator.current.go(drop, duration);
-    } else {
-      setPiece(newPiece);
-    }
+  function getStyle(){
+    const top = piece.coords.row * CELL_SIZE;
+    const left = piece.coords.column * CELL_SIZE;
+    return { transform: `translate(${left}px, ${top}px` };
   }
 
-  function handleGameStatusChange(newStatus){
-    if (newStatus === 'paused'){
-      animator.current.pause();
-    } else if (newStatus === 'started'){
-      animator.current.unpause();
-    }
-  }
-
-  onMountDo( ()=>{
-    state.onPropChange('piece', handlePieceChange);
-    state.onPropChange('gameStatus', handleGameStatusChange);
-  });
-
-  function getTranslate( {row, column} ){
-    const top = row * cellSize;
-    const left = column * cellSize;
-    return `translate(${left}px, ${top}px`;
-  }
-
-  function renderPiece(){
-    if (piece){
-      const translate = getTranslate(piece.boardCoords);
-      pieceContainer.current.style.transform = translate;
-      return (
+  if (piece){
+    return (
+      <div className='piece-container' style={ getStyle() }>
         <Piece cells={piece.cells}/>
-      );
-    }
+      </div>
+    );
   }
-
-  return(
-    <div className='piece-container' ref={pieceContainer}>
-      {renderPiece()}
-    </div>
-  );
 
 }
+
+
+//----- export code block ------------------------------------------------------
+
+export default GamePiece;
+
+
+
+
+/*function usePiece(){
+  const onMountDo = useOnMount();
+  const [piece, setPiece] = useState(pieceStore.value);
+  const coordsListener = useRef();
+  const resolveF = useRef();
+  function setCoordsListener(callback){
+    coordsListener.current = callback;
+  }
+  function handlePieceChange(newPiece, oldPiece, isSetRow){
+    if (isSetRow){
+      //coordsListener.current(newPiece.coords);
+    } else {
+      return new Promise( (resolve, reject)=>{
+        resolveF.current = resolve;
+        setPiece(newPiece);
+      });
+    }
+  }
+  useEffect( ()=>{
+    if (resolveF.current){
+      resolveF.current();
+      resolveF.current = null;
+    }
+  });
+  onMountDo( ()=>{
+    pieceStore.subscribe(handlePieceChange);
+  });
+  return [piece, setCoordsListener];
+}*/
+
+//  const [piece, onCoordsChangeDo] = usePiece();
+/*useEffect( ()=>{
+  if (piece){
+    pieceContainer.current.style.transform = getTranslateStr(piece.coords);
+  }
+});*/
+
+//function positionPiece(newCoords){
+//  pieceContainer.current.style.transform = getTranslateStr(newCoords);
+//  }
+
+//  onCoordsChangeDo(positionPiece);

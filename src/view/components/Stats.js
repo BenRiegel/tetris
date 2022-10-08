@@ -1,23 +1,18 @@
-import { useState } from 'react';
-import state from '../../state/state.js';
-import { useOnMount } from '../../lib/hooks.js';
+//----- imports ----------------------------------------------------------------
+
+import { default as scoreStore } from '../../state/score.js';
+import { default as levelStore } from '../../state/level.js';
+import { default as linesStore } from '../../state/lines.js';
+import { useStore } from '../../lib/hooks.js';
 import '../stylesheets/stats.css';
 
 
-export default function Stats(){
+//----- module code block ------------------------------------------------------
 
-  const [score, setScore] = useState(state.score);
-  const [level, setLevel] = useState(state.level);
-  const [lines, setLines] = useState(state.lines);
-
-  const onMountDo = useOnMount();
-
-  onMountDo( ()=>{
-    state.onPropChange('score', setScore);
-    state.onPropChange('level', setLevel);
-    state.onPropChange('lines', setLines);
-  });
-
+function Stats(){
+  const score = useStore(scoreStore);
+  const level = useStore(levelStore);
+  const lines = useStore(linesStore);
   return (
     <div className='score'>
       <div className='score-element'>
@@ -35,3 +30,8 @@ export default function Stats(){
     </div>
   );
 }
+
+
+//----- export code block ------------------------------------------------------
+
+export default Stats;

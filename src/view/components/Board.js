@@ -1,19 +1,31 @@
+//----- imports ----------------------------------------------------------------
+
+import boardRowsStore from '../../state/board-rows.js';
+import { useStore } from '../../lib/hooks.js';
 import BoardRow from './BoardRow';
 import '../stylesheets/board.css';
 
 
-export default function Board(){
+//----- module code block ------------------------------------------------------
 
-  let board = new Array(20).fill(0);
+function Board(){
+
+  const boardRows = useStore(boardRowsStore);
+
   return (
     <div className='board'>
       {
-        board.map( (row,i) => {
+        boardRows.map( (row,i) => {
           return (
-            <BoardRow key={i} index={i}/>
+            <BoardRow key={i} index={i} row={row}/>
           );
         })
       }
     </div>
   );
 }
+
+
+//----- export code block ------------------------------------------------------
+
+export default Board;
