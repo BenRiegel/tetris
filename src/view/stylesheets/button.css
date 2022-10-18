@@ -1,3 +1,15 @@
 .button{
   position: relative;
+  cursor: default;
+  font-size: 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.25);
+  margin-bottom: 20px;
+}
+
+.button:hover{
+  background-color: rgba(0, 0, 0, 0.5);
 }

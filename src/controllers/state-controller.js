@@ -8,6 +8,7 @@ import lines from '../state/lines.js';
 import level from '../state/level.js';
 import boardRows from '../state/board-rows.js';
 import animator from '../services/animator.js';
+import highScores from '../services/high-scores.js';
 import { ROW_FALL_SPEED, DROP_PIECE_SPEED, CLEAR_DURATION } from '../config/config.js';
 import { boardDimensions } from '../config/config.js';
 import { wait } from '../lib/utils.js';
@@ -23,6 +24,7 @@ async function gameOver(){
     await wait(25);
   }
   status.update('game-over');
+  highScores.update(score.value);
 }
 
 function dropPiece(deltaRow){
@@ -52,12 +54,6 @@ async function moveLinesDown(numClearedLines){
       return newRow;
     });
     boardRows.update(newRows);
-
-/*    boardRows.value.forEach( (row,i) => {
-      let newPosition = initPositions[i] + progress * numClearedLines;
-      newPosition = Math.min(newPosition, targetPositions[i]);
-      row.position.update(newPosition);
-    });*/
   }
   const duration = numClearedLines * ROW_FALL_SPEED;
   return animator.go(doDrop, duration);
@@ -188,7 +184,9 @@ function startGameOver(){
   piece.reset();
   score.reset();
   status.reset();
+  highScores.reset();
 }
+
 
 //----- export code block ------------------------------------------------------
 

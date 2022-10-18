@@ -1,25 +1,28 @@
 //----- imports ----------------------------------------------------------------
 
-import { useRef } from 'react';
-import { useOnRenderAsync } from '../../lib/hooks.js';
-import { animateFade } from '../../services/animator.js';
+import highScores from '../../services/high-scores.js';
+import scoreStore from '../../state/score.js';
+import Button from './Button.js';
+import HighScores from './HighScores.js';
 import '../stylesheets/game-over.css';
 
 
 //----- module code block ------------------------------------------------------
 
-function GameOver(){
+function GameOver(props){
 
-  const onRender = useOnRenderAsync();
-  const containerDiv = useRef();
-
-  onRender(async function(){
-    await animateFade(containerDiv.current, 0, 1, 500);
-  });
+  const gotHighScore = highScores.gotHighScore();
 
   return (
-    <div className='game-over' ref={containerDiv}>
-      Game Over
+    <div className='game-over'>
+      <h1>Game Over</h1>
+      <p>You finished with a score of . . .</p>
+      <p>{scoreStore.value}</p>
+      {
+        gotHighScore ? (<p>Congrats! You got a high score!</p>) : null
+      }
+      <HighScores />
+      <Button onClick={props.onClick} text='OK' />
     </div>
   );
 }

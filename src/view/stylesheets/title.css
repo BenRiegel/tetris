@@ -1,0 +1,35 @@
+.title-container{
+  font-size: 48px;
+  cursor: default;
+  text-align: center;
+  letter-spacing: 8px;
+  margin: 10px 0;
+}
+
+.color-0 {
+  color: #00f0f0; /*cyan;*/
+}
+
+.color-1{
+  color: #f0f000; /*yellow;*/
+}
+
+.color-2{
+  color: #a000f0;  /*purple*/
+}
+
+.color-3{
+  color: #0000f0; /*blue;*/
+}
+
+.color-4{
+  color: #f0a000; /* orange;*/
+}
+
+.color-5{
+  color: #00ff00;  /*green*/
+}
+
+.color-6{
+  color: #f00000;   /*red*/
+}

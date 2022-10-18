@@ -1,18 +1,21 @@
 //----- imports ----------------------------------------------------------------
 
-import '../stylesheets/button.css';
+import '../stylesheets/pause.css';
 
 
 //----- module code block ------------------------------------------------------
 
-function Button(props){
+function Pause(props){
 
   return (
-    <div className='button' onClick={props.onClick}>{props.text}</div>
+    <div className='pause'>
+      <p>Game paused</p>
+      <p>Press 'Restart' button to continue</p>
+    </div>
   );
 }
 
 
 //----- export code block ------------------------------------------------------
 
-export default Button;
+export default Pause;

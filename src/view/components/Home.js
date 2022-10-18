@@ -1,8 +1,9 @@
 //----- imports ----------------------------------------------------------------
 
-import { useRef } from 'react';
 import { useOnRenderAsync } from '../../lib/hooks.js';
 import { animateFade } from '../../services/animator.js';
+import Title from './Title.js';
+import Button from './Button.js';
 import '../stylesheets/home.css';
 
 
@@ -11,19 +12,14 @@ import '../stylesheets/home.css';
 function Home(props){
 
   const onRender = useOnRenderAsync();
-  const containerDiv = useRef();
-
-//  onRender(async function(){//
-//    await animateFade(containerDiv.current, 0, 1, 500);
-  //});
 
   return (
-    <div className='home' ref={containerDiv}>
-      <div className='title'>Tetris</div>
+    <div className='home'>
+      <Title/>
       <div className='button-container'>
-        <div className='button' onClick={props.onStartClick}>Start Game</div>
-        <div className='button' onClick={props.onInstructionsClick}> Instructions </div>
-        <div className='button' onClick={props.onScoresClick}>High Scores</div>
+        <Button onClick={props.onStartClick} text='Start Game' />
+        <Button onClick={props.onInstructionsClick} text='Instructions' />
+        <Button onClick={props.onScoresClick} text='High Scores' />
       </div>
     </div>
   );

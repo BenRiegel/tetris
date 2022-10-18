@@ -5,9 +5,11 @@ import '../../controllers/controller.js';
 import { default as statusStore } from '../../state/status.js';
 import * as actions from '../../controllers/state-controller.js';
 import { useStore } from '../../lib/hooks.js';
+import Title from './Title.js';
 import Board from './Board.js';
 import Home from './Home.js';
-import HighScores from './HighScores.js';
+import Pause from './Pause.js';
+import HighScoresPage from './HighScoresPage.js';
 import GamePiece from './GamePiece.js';
 import CountDown from './CountDown.js';
 import GameOver from './GameOver.js';
@@ -27,6 +29,7 @@ function App(){
   const [page, setPage] = useState('home');
 
   function goToHome(){
+    actions.startGameOver();
     setPage('home')
   }
   function goToGame(){
@@ -41,6 +44,11 @@ function App(){
     setPage('high-scores');
   }
 
+  function quitGame(){
+    actions.startGameOver();
+    setPage('home');
+  }
+
   function renderHome(){
     if (page === 'home'){
       return (
@@ -51,10 +59,10 @@ function App(){
     }
   }
 
-  function renderHighScores(){
+  function renderHighScoresPage(){
     if (page === 'high-scores'){
       return (
-        <HighScores onClick={goToHome}/>
+        <HighScoresPage onClick={goToHome}/>
       )
     }
   }
@@ -75,30 +83,33 @@ function App(){
 
   function renderPause(){
     if (page === 'game' && gameStatus === 'paused'){
-      //return ( <Pause /> );
+      return ( <Pause /> );
     }
   }
 
   function renderGameOver(){
     if (page === 'game' && gameStatus === 'game-over'){
-      return ( <GameOver /> );
+      return ( <GameOver onClick={goToHome}/> );
     }
   }
 
-  function renderButton(){
+  function renderPauseButton(){
     if (page === 'game' && gameStatus === 'started'){
       return ( <Button onClick={actions.pauseGame} text='Pause' /> );
     }
     if (page === 'game' && gameStatus === 'paused'){
       return ( <Button onClick={actions.restartGame} text='Restart' /> );
     }
-    if (page === 'game' && gameStatus === 'game-over'){
-      return ( <Button onClick={actions.startGameOver} text='Start Over' /> );
+  }
+
+  function renderQuitButton(){
+    if (page === 'game' && gameStatus !== 'starting' && gameStatus !== 'game-over'){
+      return ( <Button onClick={quitGame} text='Quit Game' /> );
     }
   }
 
   function renderNextPiece(){
-    if (page === 'game'){
+    if (page === 'game' && gameStatus !== 'paused'){
       return ( <NextPiece /> );
     }
   }
@@ -106,28 +117,32 @@ function App(){
   return (
     <div className='app'>
       <div className='left-section'>
-        <div className='game'>
-          <Board />
-          <GamePiece />
+        <div className='game-board'>
+          <div className='game'>
+            <Board />
+            <GamePiece />
+          </div>
+          { renderHome() }
+          { renderInstructions() }
+          { renderHighScoresPage() }
+          { renderCountDown() }
+          { renderPause() }
+          { renderGameOver() }
         </div>
-        { renderHome() }
-        { renderInstructions() }
-        { renderHighScores() }
-        { renderCountDown() }
-        { renderPause() }
-        { renderGameOver() }
       </div>
       <div className='right-section'>
         <NextPieceContainer>
           { renderNextPiece() }
         </NextPieceContainer>
         <Stats/>
-        { renderButton() }
+        <div className='button-container'>
+          { renderPauseButton() }
+          { renderQuitButton() }
+        </div>
       </div>
     </div>
   );
 }
-
 
 //----- export code block ------------------------------------------------------
 

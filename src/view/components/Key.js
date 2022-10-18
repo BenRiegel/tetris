@@ -1,18 +1,21 @@
 //----- imports ----------------------------------------------------------------
 
-import '../stylesheets/button.css';
+import '../stylesheets/key.css';
 
 
 //----- module code block ------------------------------------------------------
 
-function Button(props){
+function Key(props){
 
   return (
-    <div className='button' onClick={props.onClick}>{props.text}</div>
+    <div className='key'>
+      <span className='key-text'>{props.keyText}</span>
+      <span>{props.text}</span>
+    </div>
   );
 }
 
 
 //----- export code block ------------------------------------------------------
 
-export default Button;
+export default Key;
