@@ -32,24 +32,13 @@ function useOnRenderAsync(){
 }
 
 function useStore(store){
-  const onMountDo = useOnMount();
   const [value, setValue] = useState(store.value);
-  const resolveF = useRef();
-  function handleValueChange(newValue){
-    return new Promise( (resolve, reject)=>{
-      resolveF.current = resolve;
-      setValue(newValue);
-    });
-  }
-  onMountDo( ()=>{
-    store.subscribe(handleValueChange);
-  });
   useEffect( ()=>{
-    if (resolveF.current){
-      resolveF.current();
-      resolveF.current = null;
-    }
-  });
+    store.subscribe(setValue);
+    return ()=>{
+      store.unsubscribe(setValue);
+    };
+  }, [store]);
   return value;
 }
 
